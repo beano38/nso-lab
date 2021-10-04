@@ -1,0 +1,38 @@
+---
+# Local Host software location
+local_binary_dir: ../binary
+local_neds_dir: ../neds
+local_packages_dir: ../packages
+local_templates_dir: ../templates
+
+# Remote Host
+user: vagrant
+nso_dir: $HOME/nso-5.3.2.1
+temp_files_dir: /tmp
+
+# Binary
+version: 5.3.2.1
+os : linux.x86_64
+
+# NED Info for neds-install.yml
+xr_ned: ncs-5.3.2-cisco-iosxr-7.28
+extracted_xr_ned: cisco-iosxr-cli-7.28
+xe_ned: ncs-5.3.2-cisco-ios-6.58
+extracted_xe_ned: cisco-ios-cli-6.58
+
+# NSO netsim
+netsim_count: 2
+netsim_hostname: pe
+
+# Custom NSO Packages
+packages:
+  - interconnect
+
+# Custom NSO Static Templates
+templates:
+  - mdt
+
+# V2 NED Install
+ned_list:
+  - ncs-5.3.2-cisco-ios-6.58.signed.bin
+  - ncs-5.3.2-cisco-iosxr-7.28.signed.bin

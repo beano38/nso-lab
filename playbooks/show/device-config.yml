@@ -1,0 +1,10 @@
+- name: Show devices 
+  nso_show:
+    url: "{{ api.url }}"
+    username: "{{ api.username }}"
+    password: "{{ api.password }}"
+    path: /ncs:devices/device{xe0}
+    operational: false
+  register: shell_result
+- debug:
+    var: shell_result

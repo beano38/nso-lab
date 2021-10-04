@@ -1,0 +1,46 @@
+module dns {
+
+  namespace "http://com/example/dns";
+  prefix dns;
+
+  import ietf-inet-types { prefix inet; }
+  import tailf-common { prefix tailf; }
+  import tailf-ncs { prefix ncs; }
+
+  description
+    "Simple package to set Domain Name Server configurations";
+
+  grouping dns_conf {
+
+    leaf dns_ip {
+      tailf:info "IPv4 Address of DNS Resolver";
+      mandatory true;
+      type inet:ipv4-address;
+    }
+    leaf domain_name {
+      tailf:info "Domain Name of Network";
+      mandatory true;
+      type string;
+    }
+  }
+
+  list dns {
+    key name;
+
+    uses ncs:service-data;
+    ncs:servicepoint "dns";
+
+    leaf name {
+      type string;
+    }
+
+    // may replace this with other ways of refering to the devices.
+    leaf-list device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    uses dns:dns_conf;
+  }
+}

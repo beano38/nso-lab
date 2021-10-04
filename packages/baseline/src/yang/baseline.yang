@@ -1,0 +1,51 @@
+module baseline {
+
+  namespace "http://example.com/baseline";
+  prefix baseline;
+
+  
+  import ietf-inet-types { prefix inet; }
+  import tailf-common { prefix tailf; }
+  import tailf-ncs { prefix ncs; }
+
+  // import common service models
+  import dns { prefix dns; }
+  import ntp { prefix ntp; }
+  import vrf { prefix vrf; }
+  import logging { prefix logging; }
+
+  grouping baseline_conf {
+
+    leaf mgmt_gw {
+      tailf:info "Gateway IP address of Management Network";
+      mandatory true;
+      type string;
+    }
+  }
+
+  list baseline {
+    description "Base Configuration of Region";
+
+    key name;
+    leaf name {
+      tailf:info "Region Name";
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint baseline-servicepoint;
+
+    // may replace this with other ways of refering to the devices.
+    leaf-list device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    uses baseline:baseline_conf;
+    uses vrf:vrf_conf;
+    uses dns:dns_conf;
+    uses ntp:ntp_conf;
+    uses logging:logging_conf;
+  }
+}

@@ -1,0 +1,15 @@
+---
+
+- name: Render jinja2 templates for merge into NSO templates
+  template:
+    src: "{{ install.local_templates_dir }}/{{ item }}.j2"
+    dest: "{{ install.temp_files_dir }}/{{ item }}.xml"
+  loop:
+    "{{ install.templates }}"
+
+- name: Load static templates into NSO
+  shell: source {{ install.nso_dir }}/ncsrc && ncs_load -l -m {{ install.temp_files_dir }}/{{ item }}.xml
+  args:
+    executable: /bin/bash
+  loop:
+    "{{ install.templates }}"

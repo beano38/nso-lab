@@ -1,0 +1,62 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0"
+                 servicepoint="ntp">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <device>
+      <name>{/device}</name>
+
+      <!-- IOSXR Config -->
+      <config>
+        <ntp xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <server tags="replace">
+            <vrf>
+              <name>Mgmt-intf</name>
+              <server-list>
+                <name>{/ntp_ip}</name>
+              </server-list>
+            </vrf>
+          </server>
+          <source>
+            <MgmtEth>{/mgmt_intf_xr}</MgmtEth>
+          </source>
+        </ntp>
+
+        <clock xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <timezone>
+            <zone>EST</zone>
+            <region>America/New_York</region>
+          </timezone>
+        </clock>
+        
+      </config>
+      <!-- END IOSXR Config -->
+
+      <!-- IOSXE Config -->
+      <config>
+        <ntp xmlns="urn:ios">
+          <source>
+            <GigabitEthernet>{/mgmt_intf_xe}</GigabitEthernet>
+          </source>
+          <server tags="replace">
+            <vrf>
+              <name>Mgmt-intf</name>
+              <peer-list>
+                <name>{/ntp_ip}</name>
+              </peer-list>
+            </vrf>
+          </server>
+        </ntp>
+
+        <clock xmlns="urn:ios">
+          <timezone>
+            <zone>EST</zone>
+            <hours>-4</hours>
+            <minutes>0</minutes>
+          </timezone>
+        </clock>
+
+      </config>
+      <!-- END IOSXE Config -->
+
+    </device>
+  </devices>
+</config-template>

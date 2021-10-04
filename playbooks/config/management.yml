@@ -1,0 +1,66 @@
+- name: Build Management template
+  nso_config:
+    url: "{{ api.url }}"
+    username: "{{ api.username }}"
+    password: "{{ api.password }}"
+    data:
+      tailf-ncs:devices:
+        template:
+        - name: management-test
+          ned-id:
+
+          # Cisco IOS-XE Config
+          - id: cisco-ios-cli-6.58:cisco-ios-cli-6.58
+            config:
+              # interface:
+              #   GigabitEthernet:
+              #   - name: '0/1'
+              #     ip:
+              #       address:
+              #         primary:
+              #           address: 2.3.4.4
+              #           mask: 255.255.255.0
+                  # vrf:
+                  #   forwarding: Mgmt-intf
+              ip:
+                route:
+                  # - vrf:
+                  #   name: Mgmt-intf
+                  #   ip-route-forwarding-list:
+                  #   - forwarding-address: 2.3.4.1
+                  #     mask: 0.0.0.0
+                  #     prefix: 0.0.0.0
+
+                  ip-route-forwarding-list:
+                  - forwarding-address: 2.3.4.1
+                    mask: 0.0.0.0
+                    prefix: 0.0.0.0
+                    
+            
+          - id: cisco-iosxr-cli-7.28:cisco-iosxr-cli-7.28
+            config:
+          #     tailf-ned-cisco-ios-xr:interface:
+          #       MgmtEth:
+          #       - id: 0/0/0/0
+          #         ipv4:
+          #           address:
+          #             ip: 4.3.2.2
+          #             mask: 255.255.255.0
+          #         vrf: Mgmt-intf
+              router:
+                static:
+                  address-family:
+                    ipv4:
+                      unicast:
+                        routes-ip:
+                        - address: 2.3.4.1
+                          net: 0.0.0.0/0
+                  # vrf:
+                  # - address-family:
+                  #     ipv4:
+                  #       unicast:
+                  #         routes-ip:
+                  #         - address: 2.3.4.1
+                  #           net: 0.0.0.0/0
+                  #   # name: Mgmt-intf
+            

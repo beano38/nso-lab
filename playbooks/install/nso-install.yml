@@ -1,0 +1,42 @@
+---
+- name: Create directory structure
+  file:
+    path: "{{ install.nso_dir }}"
+    state: directory
+
+- name: Copy NSO binary to server
+  copy:
+    src: "{{ install.local_binary_dir }}/nso-{{ install.version }}.{{ install.os }}.installer.bin"
+    dest: "{{ install.temp_files_dir }}"
+
+- name: Extract NSO
+  shell: "sh {{ install.temp_files_dir }}/nso-{{ install.version }}.{{ install.os }}.installer.bin {{ install.nso_dir }} --local-install"
+  args:
+    creates: "{{ install.nso_dir }}/README"
+
+- name: Add variables to bashrc
+  lineinfile:
+    dest: $HOME/.bashrc
+    line: "source {{ install.nso_dir }}/ncsrc"
+    create: true
+
+- name: Install NSO
+  shell: source {{ install.nso_dir }}/ncsrc && ncs-setup --dest {{ install.nso_dir }}/ncs-run
+  args:
+    executable: /bin/bash
+    creates: "{{ install.nso_dir }}/ncs-run/README.ncs"
+
+- name: Check NSO Status
+  shell: source {{ install.nso_dir }}/ncsrc && ncs --status 2>&1 | grep started | awk -F' ' '{print $2}'
+  args:
+    executable: /bin/bash
+  register:
+    nso_status
+
+- name: Start NSO if not started
+  shell: source {{ install.nso_dir }}/ncsrc && ncs
+  args:
+    executable: /bin/bash
+    chdir: "{{ install.nso_dir }}/ncs-run"
+  when: nso_status.stdout != "started"
+  ignore_errors: true

@@ -1,0 +1,27 @@
+---
+- hosts: nso
+  gather_facts: false
+  collections:
+  - cisco.nso
+
+  pre_tasks:
+    - name: Load NSO Variable Files
+      include_vars:
+        file: vars/nso-api.yml
+        name: api
+
+    - name: Load Network Variable Files
+      include_vars:
+        file: vars/network/global_vars.yml
+        name: network
+
+  tasks:
+    # - include: action/sync-from.yml
+    # - include: action/packages-reload.yml
+    # - include: show/device-config.yml
+    # - include: query/device-query.yml
+    # - include: config/management.yml
+    # - include: config/baseconf.yml
+    # - include: config/authgroup.yml
+    # - include: config/add_devices.yml
+    - include: config/interconnect.yml

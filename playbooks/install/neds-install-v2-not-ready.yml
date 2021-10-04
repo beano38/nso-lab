@@ -1,0 +1,59 @@
+---
+
+- name: Copy NEDs to server
+  become_user: "{{ user }}"
+  copy:
+    src: "{{ local_source_dir }}/neds/{{ item }}"
+    dest: "{{ download_dir }}"
+    owner: "{{ user }}"
+    group: "{{ user }}"
+  loop: "{{ ned_list }}"
+
+- name: Validate NED from signed.bin file
+  command: sh {{ download_dir }}/{{ item }}
+  loop: "{{ ned_list }}"
+  args:
+    chdir: "{{ download_dir }}"
+
+- name: Set list of tar'd NEDs
+  find:
+    paths: "{{ download_dir }}"
+    patterns: "^ncs.*tar.gz$"
+    use_regex: true
+  register: ned_list_tar_raw
+
+# - debug:
+#    var: ned_list_tar_raw.files
+
+- name: Remove sample NEDs
+  file:
+    path: "{{ nso_dir }}/packages/neds"
+    state: absent
+
+- name: Create NED directory
+  file:
+    path: "{{ nso_dir }}/packages/neds"
+    state: directory
+
+- name: Expand NED to install directory 
+  unarchive:
+    src: "{{ item.path }}"
+    dest: "{{ nso_dir }}/packages/neds"
+    remote_src: true
+  loop: "{{ ned_list_tar_raw.files }}"
+
+- name: Set list of expanded NEDs
+  find:
+    paths: "{{ nso_dir }}/packages/neds"
+    file_type: directory
+  register: expanded_ned_list_raw
+
+- debug:
+   var: expanded_ned_list_raw
+
+# - name: Link NEDs to NSO instance
+#   file:
+#      src: "{{ item.path }}"
+#      dest: "{{ nso_dir }}/ncs-run"
+#      state: link
+#   loop: "{{ expanded_ned_list_raw.files }}"

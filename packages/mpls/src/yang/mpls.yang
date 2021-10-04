@@ -1,0 +1,67 @@
+module mpls {
+
+  namespace "http://example.com/mpls";
+  prefix mpls;
+
+  import ietf-inet-types {prefix inet;}
+  import tailf-common {prefix tailf;}
+  import tailf-ncs {prefix ncs;}
+
+  description
+    "Initial revision, MPLS Configuration";
+
+  list mpls {
+    description "Method to enable MPLS LDP";
+
+    key name;
+    leaf name {
+      tailf:info "Unique service id";
+      tailf:cli-allow-range;
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint mpls-servicepoint;
+
+    // may replace this with other ways of refering to the devices.
+    leaf device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    list interface {
+      description "Interfaces that will be configured";
+      key "interface_type interface_number";
+
+      leaf interface_type {
+        type enumeration{
+          enum "FastEthernet";
+          enum "GigabitEthernet";
+          enum "TenGigE";
+          enum "HundredGigE";
+          enum "Loopback";
+        }
+      }
+      leaf interface_number {
+        tailf:info "Interface Number, example 0/1";
+        type string;
+      }
+    }
+    container isis {
+      description "ISIS parameters";
+      leaf process_name {
+        tailf:info "ISIS Process Name";
+        mandatory true;
+        type string;
+      }
+    }
+    container mpls {
+      description "MPLS parameters";
+      leaf router_id {
+        tailf:info "Router ID of MPLS Process, usually IPv4 Address of Loopback0";
+        type inet:ipv4-address;
+      }
+    }
+  }
+}

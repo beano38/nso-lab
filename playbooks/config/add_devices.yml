@@ -1,0 +1,17 @@
+---
+- name: Add Devices to NSO
+  nso_config:
+    url: "{{ api.url }}"
+    username: "{{ api.username }}"
+    password: "{{ api.password }}"
+    data:
+      tailf-ncs:devices:
+        device:
+        - name: RR01-XR9KV
+          address: 172.16.100.151
+          authgroup: CST
+          device-type:
+            cli:
+              ned-id: cisco-iosxr-cli-7.28:cisco-iosxr-cli-7.28
+          state:
+            admin-state: unlocked

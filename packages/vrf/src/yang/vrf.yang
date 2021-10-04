@@ -1,0 +1,45 @@
+module vrf {
+  namespace "http://com/example/vrf";
+  prefix vrf;
+
+  import ietf-inet-types { prefix inet; }
+  import tailf-common { prefix tailf; }
+  import tailf-ncs { prefix ncs; }
+
+  description
+    "Simple package to create a VRF instance";
+
+  revision 2019-07-08 {
+    description
+      "Initial revision.";
+  }
+
+  grouping vrf_conf {
+
+    leaf vrf_name {
+      tailf:info "Name of VRF Instance";
+      mandatory true;
+      type string;
+    }
+  }
+
+  list vrf {
+    key name;
+
+    uses ncs:service-data;
+    ncs:servicepoint "vrf";
+
+    leaf name {
+      type string;
+    }
+
+    // may replace this with other ways of refering to the devices.
+    leaf-list device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    uses vrf:vrf_conf;
+  }
+}

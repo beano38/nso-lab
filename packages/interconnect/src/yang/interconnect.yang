@@ -1,0 +1,64 @@
+module interconnect {
+
+  namespace "http://example.com/interconnect";
+  prefix interconnect;
+
+  import ietf-inet-types { prefix inet; }
+  import tailf-common { prefix tailf; }
+  import tailf-ncs { prefix ncs; }
+
+  list interconnect {
+    description "Model to create an L3 interconnect";
+
+    key name;
+    leaf name {
+      tailf:info "Unique service id";
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint interconnect-servicepoint;
+
+    list device-interfaces {
+      tailf:info "Device and Interface detail";
+      min-elements 2;
+      max-elements 2;
+      key "device";
+      leaf device {
+        tailf:info "Device Name";
+        mandatory true;
+        type leafref {
+          path "/ncs:devices/ncs:device/ncs:name";
+        }
+      }
+      leaf intf-number {
+        tailf:info "GigabitEthernet Interface ID";
+        mandatory true;
+        type string;
+      }
+      leaf description {
+        tailf:info "Interface Description";
+        mandatory true;
+        type string;
+      }
+      leaf ipv4_address {
+        tailf:info "IPv4 Address";
+        mandatory true;
+        type inet:ipv4-address;
+      }
+      leaf ipv4_mask {
+        tailf:info "IPv4 Netmask";
+        mandatory true;
+        type inet:ipv4-address;
+      }
+      leaf ipv6_address {
+        tailf:info "IPv6 Address";
+        type inet:ipv6-address;
+      }
+      leaf ipv6_length {
+        tailf:info "IPv6 Prefix Length";
+        type string;
+      }
+    }
+  }
+}

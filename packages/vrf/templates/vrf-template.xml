@@ -1,0 +1,42 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0"
+                 servicepoint="vrf">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <device>
+      <name>{/device}</name>
+
+      <!-- IOSXR Config -->
+      <config>
+        <vrf xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <vrf-list>
+            <name>{/vrf_name}</name>
+            <address-family>
+              <ipv4>
+                <unicast/>
+              </ipv4>
+              <ipv6>
+                <unicast/>
+              </ipv6>
+            </address-family>
+          </vrf-list>
+        </vrf>
+      </config>
+      <!-- END IOSXR Config -->
+
+      <!-- IOSXE Config -->
+      <config>
+        <vrf xmlns="urn:ios">
+          <definition>
+            <name>{/vrf_name}</name>
+            <address-family>
+              <ipv4/>
+              <ipv6/>
+            </address-family>
+          </definition>
+        </vrf>
+      </config>
+      <!-- END IOSXE Config -->
+
+    </device>
+  </devices>
+</config-template>
+

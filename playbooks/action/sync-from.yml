@@ -1,0 +1,6 @@
+- name: Sync from all Network Elements
+  nso_action:
+    url: "{{ api.url }}"
+    username: "{{ api.username }}"
+    password: "{{ api.password }}"
+    path: /ncs:devices/sync-from

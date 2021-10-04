@@ -1,0 +1,16 @@
+---
+- name: Build Management template
+  nso_config:
+    url: "{{ api.url }}"
+    username: "{{ api.username }}"
+    password: "{{ api.password }}"
+    data:
+      tailf-ncs:devices:
+        authgroups:
+          group:
+          - name: CST
+            umap:
+            - local-user: admin
+              remote-name: nso
+              remote-password: nso123
+              remote-secondary-password: cisco

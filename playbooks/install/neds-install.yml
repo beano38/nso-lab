@@ -1,0 +1,40 @@
+---
+- name: Copy NEDs to Host
+  copy:
+    src: "{{ install.local_neds_dir }}"
+    dest: "{{ install.temp_files_dir }}" 
+
+- name: Validate XR NED
+  shell: "sh {{ install.temp_files_dir }}/neds/{{ install.xr_ned }}.signed.bin"
+  args:
+    chdir: "{{ install.temp_files_dir }}"
+    creates: "{{ install.temp_files_dir }}/{{ install.xr_ned }}.tar.gz"
+
+- name: Validate XE NED
+  shell: "sh {{ install.temp_files_dir }}/neds/{{ install.xe_ned }}.signed.bin"
+  args:
+    chdir: "{{ install.temp_files_dir }}"
+    creates: "{{ install.temp_files_dir }}/{{ install.xe_ned }}.tar.gz"
+
+- name: Extract XR NED
+  unarchive:
+    src: "{{ install.temp_files_dir }}/{{ install.xr_ned }}.tar.gz"
+    dest: "{{ install.nso_dir }}/packages/neds"
+    remote_src: true
+- name: Extract XE NED
+  unarchive:
+    src: "{{ install.temp_files_dir }}/{{ install.xe_ned }}.tar.gz"
+    dest: "{{ install.nso_dir }}/packages/neds"
+    remote_src: true
+
+- name: Activate NEDs
+  shell: >
+    source {{ install.nso_dir }}/ncsrc && ncs-setup 
+    --package {{ install.nso_dir }}/packages/neds/{{ install.extracted_xe_ned }}
+    --package {{ install.nso_dir }}/packages/neds/{{ install.extracted_xr_ned }}
+    --dest {{ install.nso_dir }}/ncs-run
+  args:
+    executable: /bin/bash
+    creates: "{{ install.nso_dir }}/ncs-run/packages/{{ install.extracted_xr_ned }}/README"
+
+- include: action/packages-reload.yml

@@ -1,0 +1,37 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0"
+                 servicepoint="logging">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <device>
+      <name>{/device}</name>
+
+      <!-- IOSXR Config -->
+      <config>
+
+        <logging xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <host tags="replace">
+            <address>{/logging_ip}</address>
+            <vrf>Mgmt-intf</vrf>
+          </host>
+        </logging>
+
+      </config>
+      <!-- END IOSXR Config -->
+
+      <!-- IOSXE Config -->
+      <config>
+
+        <logging xmlns="urn:ios">
+          <host tags="replace">
+            <ipv4-vrf>
+              <host>{/logging_ip}</host>
+              <vrf>Mgmt-intf</vrf>
+            </ipv4-vrf>
+          </host>
+        </logging>
+
+      </config>
+      <!-- END IOSXE Config -->
+
+    </device>
+  </devices>
+</config-template>

@@ -1,0 +1,20 @@
+---
+- name: Base configuration for XR and XE Devices
+  nso_config:
+    url: "{{ api.url }}"
+    username: "{{ api.username }}"
+    password: "{{ api.password }}"
+    data:
+      baseconf:baseconf:
+      - name: "{{ item.region_name }}"
+        ipv4_addr_dns: "{{ item.global.name_servers}}"
+        ntp_addr: "{{ item.global.ntp_servers }}"
+        vrf_name: "{{ item.global.mgmt_vrf }}"
+        xe_mgmt_intf: "{{ item.global.xe_mgmt_int }}"
+        xr_mgmt_intf: "{{ item.global.xr_mgmt_int }}"
+        device: "{{ item.devices }}"
+  loop:
+    "{{ network.regions }}"
+
+
+

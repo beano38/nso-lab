@@ -1,0 +1,89 @@
+module isis {
+
+  namespace "http://example.com/isis";
+  prefix isis;
+
+  import ietf-inet-types {prefix inet;}
+  import tailf-common {prefix tailf;}
+  import tailf-ncs {prefix ncs;}
+
+  description
+    "Initial revision, Routing Configuration";
+
+  list isis {
+    description "Interface Routing Configuration";
+
+    key name;
+    leaf name {
+      tailf:info "Unique service id";
+      tailf:cli-allow-range;
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint isis-servicepoint;
+
+    leaf device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    list interface {
+      description "Interfaces that will be configured";
+      key "interface_type interface_number";
+
+      leaf interface_type {
+        type enumeration{
+          enum "FastEthernet";
+          enum "GigabitEthernet";
+          enum "TenGigE";
+          enum "HundredGigE";
+          enum "Loopback";
+        }
+      }
+      leaf interface_number {
+        tailf:info "Interface Number, example 0/1";
+        type string;
+      }
+      leaf passive {
+        tailf:info "Passive Interface";
+        type boolean;
+        default false;
+      }
+      container bfd {
+      tailf:info "BFD Configuration Options";
+        leaf enabled {
+          tailf:info "Enable BFD";
+          type boolean;
+          default false;
+        }
+        leaf interval {
+          tailf:info "Interval in microseconds, default 15";
+          when "boolean(../enabled)";
+          type string;
+          default "15";
+        }
+        leaf multiplier {
+          tailf:info "BFD Multiplier, default 3";
+          when "boolean(../enabled)";
+          type string;
+          default "3";
+        }
+      }
+    }
+    container isis {
+      description "ISIS parameters";
+      leaf process_name {
+        tailf:info "ISIS Process Name";
+        mandatory true;
+        type string;
+      }
+      leaf net_id {
+        tailf:info "ISIS Network Entity Title";
+        mandatory true;
+        type string;
+      }
+    }
+  }
+}

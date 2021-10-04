@@ -1,0 +1,39 @@
+module logging {
+  namespace "http://com/example/logging";
+  prefix logging;
+
+  import ietf-inet-types { prefix inet; }
+  import tailf-common { prefix tailf; }
+  import tailf-ncs { prefix ncs; }
+
+  description
+    "Setup Syslog on the target Device";
+  
+  grouping logging_conf {
+
+    leaf logging_ip {
+      tailf:info "IPv4 Address or Domain Name of Syslog Server";
+      mandatory true;
+      type string;
+    }
+  }
+
+  list logging {
+    key name;
+    leaf name {
+      tailf:info "Region Name";
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint "logging";
+
+    // may replace this with other ways of refering to the devices.
+    leaf-list device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+    uses logging:logging_conf;
+  }
+}

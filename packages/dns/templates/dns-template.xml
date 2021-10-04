@@ -1,0 +1,50 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0"
+                 servicepoint="dns">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <device>
+      <name>{/device}</name>
+
+      <!-- IOSXR Config -->
+      <config>
+        <domain xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <vrf>
+            <id>Mgmt-intf</id>
+            <name-server tags="replace">
+              <address>{/dns_ip}</address>
+            </name-server>
+            <name>{/domain_name}</name>
+          </vrf>
+        </domain>
+      </config>
+      <!-- END IOSXR Config -->
+
+      <!-- IOSXE Config -->
+      <config>
+        <ip xmlns="urn:ios">
+          <name-server tags="replace">
+            <vrf>
+              <name>Mgmt-intf</name>
+              <name-server-list>
+                <address>{/dns_ip}</address>
+              </name-server-list>
+            </vrf>
+          </name-server>
+
+          <domain>
+            <name-vrf>
+              <name>
+                <vrf>
+                  <name>Mgmt-intf</name>
+                  <domain-name>{/domain_name}</domain-name>
+                </vrf>
+              </name>
+            </name-vrf>
+          </domain>
+
+        </ip>
+      </config>
+      <!-- END IOSXE Config -->
+
+    </device>
+  </devices>
+</config-template>

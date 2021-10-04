@@ -1,0 +1,16 @@
+- name: Delete a device from a group
+  nso_config:
+    url: "{{ api.url }}"
+    username: "{{ api.username }}"
+    password: "{{ api.password }}"
+    data:
+      tailf-ncs:devices:
+        device-group:
+        - name: somegroup
+          device-name:
+          - xr0
+          - xr1
+          __state: absent
+
+
+        

@@ -1,0 +1,54 @@
+<config xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <template>
+        <name>{{ topology.name }}_DNS_Config</name>
+
+        <!-- IOSXR Config -->
+        <ned-id>
+            <id xmlns:cisco-iosxr-cli-7.28="http://tail-f.com/ns/ned-id/cisco-iosxr-cli-7.28">cisco-iosxr-cli-7.28:cisco-iosxr-cli-7.28</id>
+            <config>
+                <domain xmlns="http://tail-f.com/ned/cisco-ios-xr">
+                    <vrf>
+                        <id>Mgmt-intf</id>
+                        <name-server tags="replace">
+                            <address>{{ topology.baseline.dns_ip }}</address>
+                        </name-server>
+                        <name>{{ topology.baseline.domain_name }}</name>
+                    </vrf>
+                </domain>
+            </config>
+        </ned-id>
+        <!-- END IOSXR Config -->
+
+        <!-- IOSXE Config -->
+        <ned-id>
+            <id xmlns:cisco-ios-cli-6.58="http://tail-f.com/ns/ned-id/cisco-ios-cli-6.58">cisco-ios-cli-6.58:cisco-ios-cli-6.58</id>
+            <config>
+                <ip xmlns="urn:ios">
+                    <name-server tags="replace">
+                        <vrf>
+                            <name>Mgmt-intf</name>
+                            <name-server-list>
+                                <address>{{ topology.baseline.dns_ip }}</address>
+                            </name-server-list>
+                        </vrf>
+                    </name-server>
+
+                    <domain>
+                        <name-vrf>
+                        <name>
+                            <vrf>
+                                <name>Mgmt-intf</name>
+                                <domain-name>{{ topology.baseline.domain_name }}</domain-name>
+                            </vrf>
+                        </name>
+                        </name-vrf>
+                </domain>
+                </ip>
+            </config>
+        </ned-id>
+      <!-- END IOSXE Config -->
+    
+    </template>
+  </devices>
+</config>

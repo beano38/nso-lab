@@ -1,0 +1,276 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+
+    <!-- **************** XR Config **************** -->
+    <device>
+      <name>{/device}</name>
+      <config>
+        <router xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <isis>
+            <tag>
+              <!-- Begin ISIS Process Config  -->
+              <name>{/isis/process_name}</name>
+              <set-overload-bit>
+                <on-startup>wait-for-bgp</on-startup>
+              </set-overload-bit>
+              <is-type>level-2-only</is-type>
+              <net>
+                <id>{/isis/net_id}</id>
+              </net>
+              <nsf>
+                <cisco/>
+              </nsf>
+              <log>
+                <adjacency>
+                  <changes/>
+                </adjacency>
+              </log>
+              <lsp-refresh-interval>65000</lsp-refresh-interval>
+              <max-lsp-lifetime>65535</max-lsp-lifetime>
+              <address-family>
+                <ipv4>
+                  <unicast>
+                    <metric-style>wide</metric-style>
+                  </unicast>
+                </ipv4>
+              </address-family>
+
+              <!-- Begin Interface Config -->
+              <interface foreach="{/interface}">
+                <name>{interface_type}{interface_number}</name>
+                
+                <interface-type when="{passive='true'}">passive</interface-type>
+
+                <bfd when="{bfd/enabled='true'}">
+                  <minimum-interval>{bfd/interval}</minimum-interval>
+                  <multiplier>{bfd/multiplier}</multiplier>
+                  <fast-detect>
+                    <ipv4/>
+                  </fast-detect>
+                </bfd>
+                
+                <circuit-type when="{passive='false'}">level-2-only</circuit-type>
+                <point-to-point when="{passive='false'}"/>
+                <address-family>
+
+                  <ipv4>
+                    <unicast>
+
+                      <metric-level when="{interface_type='FastEthernet'}">
+                        <metric>
+                          <level>2</level>
+                          <value>90</value>
+                        </metric>
+                      </metric-level>
+                      <metric-level when="{interface_type='GigabitEthernet'}">
+                        <metric>
+                          <level>2</level>
+                          <value>50</value>
+                        </metric>
+                      </metric-level>
+                      <metric-level when="{interface_type='TenGigE'}">
+                        <metric>
+                          <level>2</level>
+                          <value>40</value>
+                        </metric>
+                      </metric-level>
+                      <metric-level when="{interface_type='HundredGigE'}">
+                        <metric>
+                          <level>2</level>
+                          <value>20</value>
+                        </metric>
+                      </metric-level>
+                    </unicast>
+                  </ipv4>
+                  
+                  <ipv6>
+                    <unicast>
+                      <metric-level when="{interface_type='FastEthernet'}">
+                        <metric>
+                          <level>2</level>
+                          <value>90</value>
+                        </metric>
+                      </metric-level>
+                      <metric-level when="{interface_type='GigabitEthernet'}">
+                        <metric>
+                          <level>2</level>
+                          <value>50</value>
+                        </metric>
+                      </metric-level>
+                      <metric-level when="{interface_type='TenGigE'}">
+                        <metric>
+                          <level>2</level>
+                          <value>40</value>
+                        </metric>
+                      </metric-level>
+                      <metric-level when="{interface_type='HundredGigE'}">
+                        <metric>
+                          <level>2</level>
+                          <value>20</value>
+                        </metric>
+                      </metric-level>
+                    </unicast>
+                  </ipv6>
+                </address-family>
+              </interface>
+            </tag>
+          </isis>
+        </router>
+
+      </config>
+    </device>
+    <!-- **************** End XR Config **************** -->
+
+    <!-- **************** XE Config **************** -->
+    <device>
+      <name>{/device}</name>
+      <config>
+        <!-- Begin ISIS Process Config  -->
+        <router xmlns="urn:ios">
+          <isis-container>
+            <isis>
+              <area-tag>{/isis/process_name}</area-tag>
+              <net>
+                <tag>{/isis/net_id}</tag>
+              </net>
+              <is-type>level-2-only</is-type>
+              <metric-style>
+                <wide/>
+              </metric-style>
+              <max-lsp-lifetime>65535</max-lsp-lifetime>
+              <log-adjacency-changes/>
+              <distance>
+                <distance-ip>
+                  <distance>15</distance>
+                  <ip/>
+                </distance-ip>
+              </distance>
+              <passive-interface>
+                <interface>
+                  <name>Loopback0</name>
+                </interface>
+              </passive-interface>
+              <spf-interval>
+                <intervals>
+                  <interval>30</interval>
+                  <initial-wait>50</initial-wait>
+                  <minimum-wait>200</minimum-wait>
+                </intervals>
+              </spf-interval>
+            </isis>
+          </isis-container>
+        </router>
+
+        <bfd-template xmlns="urn:ios" when="{/interface/bfd/enabled='true'}">
+          <single-hop>
+            <name>IGP</name>
+            <interval>
+              <min-tx>{/interface/bfd/interval}</min-tx>
+              <min-rx>{/interface/bfd/interval}</min-rx>
+              <multiplier>{/interface/bfd/multiplier}</multiplier>
+            </interval>
+          </single-hop>
+        </bfd-template>
+
+        <!-- Begin Interface Config -->
+        <interface xmlns="urn:ios" foreach="{/interface}">
+          <FastEthernet when="{interface_type='FastEthernet'}">
+            <name>{interface_number}</name>
+            <bfd when="{bfd/enabled='true'}">
+              <template>IGP</template>
+            </bfd>
+            <isis>
+              <bfd when="{bfd/enabled='true'}"/>
+              <circuit-type>level-2-only</circuit-type>
+              <network>point-to-point</network>
+              <metric-level>
+                <metric>
+                  <level>level-2</level>
+                  <default>90</default>
+                </metric>
+              </metric-level>
+            </isis>
+            <ip>
+              <router>
+                <isis>
+                  <tag>{/isis/process_name}</tag>
+                </isis>
+              </router>
+            </ip>
+             <ipv6>
+              <router>
+                <isis>
+                  <tag>{/isis/process_name}</tag>
+                </isis>
+              </router>
+            </ipv6>
+          </FastEthernet>
+          <GigabitEthernet when="{interface_type='GigabitEthernet'}">
+            <name>{interface_number}</name>
+            <bfd when="{bfd/enabled='true'}">
+              <template>IGP</template>
+            </bfd>
+            <isis>
+              <bfd when="{bfd/enabled='true'}"/>
+              <circuit-type>level-2-only</circuit-type>
+              <network>point-to-point</network>
+              <metric-level>
+                <metric>
+                  <level>level-2</level>
+                  <default>50</default>
+                </metric>
+              </metric-level>
+            </isis>
+            <ip>
+              <router>
+                <isis>
+                  <tag>{/isis/process_name}</tag>
+                </isis>
+              </router>
+            </ip>
+             <ipv6>
+              <router>
+                <isis>
+                  <tag>{/isis/process_name}</tag>
+                </isis>
+              </router>
+            </ipv6>
+          </GigabitEthernet>
+          <TenGigabitEthernet when="{interface_type='TenGigE'}">
+            <name>{interface_number}</name>
+            <bfd when="{bfd/enabled='true'}">
+              <template>IGP</template>
+            </bfd>
+            <isis>
+              <bfd when="{bfd/enabled='true'}"/>
+              <circuit-type>level-2-only</circuit-type>
+              <network>point-to-point</network>
+              <metric-level>
+                <metric>
+                  <level>level-2</level>
+                  <default>40</default>
+                </metric>
+              </metric-level>
+            </isis>
+            <ip>
+              <router>
+                <isis>
+                  <tag>{/isis/process_name}</tag>
+                </isis>
+              </router>
+            </ip>
+             <ipv6>
+              <router>
+                <isis>
+                  <tag>{/isis/process_name}</tag>
+                </isis>
+              </router>
+            </ipv6>
+          </TenGigabitEthernet>
+        </interface>
+      </config>
+    </device>
+    <!-- **************** End XE Config **************** -->
+
+  </devices>
+</config-template>

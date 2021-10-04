@@ -1,0 +1,77 @@
+module bfd {
+
+  namespace "http://example.com/bfd";
+  prefix bfd;
+
+  import ietf-inet-types {prefix inet;}
+  import tailf-common {prefix tailf;}
+  import tailf-ncs {prefix ncs;}
+
+  description
+    "Initial revision, MPLS Configuration";
+
+  list bfd {
+    description "This is an RFS skeleton service";
+
+    key name;
+    leaf name {
+      tailf:info "Unique service id";
+      tailf:cli-allow-range;
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint bfd-servicepoint;
+
+    leaf device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    list interface {
+      description "Interfaces that will be configured";
+      key "interface_type interface_number";
+
+      leaf interface_type {
+        type enumeration{
+          enum "FastEthernet";
+          enum "GigabitEthernet";
+          enum "TenGigE";
+          enum "HundredGigE";
+          enum "Loopback";
+        }
+      }
+      leaf interface_number {
+        tailf:info "Interface Number, example 0/1";
+        type string;
+      }
+      container bfd {
+      tailf:info "BFD Configuration Options";
+        leaf enabled {
+          tailf:info "Enable BFD";
+          type boolean;
+          default false;
+        }
+        leaf interval {
+          tailf:info "Interval in microseconds, default 15";
+          type string;
+          default "15";
+        }
+        leaf multiplier {
+          tailf:info "BFD Multiplier, default 3";
+          type string;
+          default "3";
+        }
+      }
+    }
+    container isis {
+      description "ISIS parameters";
+      leaf process_name {
+        tailf:info "ISIS Process Name";
+        mandatory true;
+        type string;
+      }
+    }
+  }
+}

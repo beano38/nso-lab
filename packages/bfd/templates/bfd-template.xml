@@ -1,0 +1,73 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <!-- **************** XR Config **************** -->
+    <device>
+      <name>{/device}</name>
+      <config>
+        <router xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <isis>
+            <tag>
+              <!-- Begin ISIS Process Config  -->
+              <name>{/isis/process_name}</name>
+
+              <!-- Begin Interface Config -->
+              <interface foreach="{/interface}">
+                <name>{interface_type}{interface_number}</name>
+                <bfd>
+                  <minimum-interval>{bfd/interval}</minimum-interval>
+                  <multiplier>{bfd/multiplier}</multiplier>
+                  <fast-detect>
+                    <ipv4/>
+                  </fast-detect>
+                </bfd>
+              </interface>
+            </tag>
+          </isis>
+        </router>
+
+      </config>
+    </device>
+    <!-- **************** End XR Config **************** -->
+
+    <!-- **************** XE Config **************** -->
+    <device>
+      <name>{/device}</name>
+      <config>
+
+        <bfd-template xmlns="urn:ios">
+          <single-hop>
+            <name>IGP</name>
+            <interval>
+              <min-tx>{/interface/bfd/interval}</min-tx>
+              <min-rx>{/interface/bfd/interval}</min-rx>
+              <multiplier>{/interface/bfd/multiplier}</multiplier>
+            </interval>
+          </single-hop>
+        </bfd-template>
+
+        <!-- Begin Interface Config -->
+        <interface xmlns="urn:ios" foreach="{/interface}">
+          <FastEthernet when="{interface_type='FastEthernet'}">
+            <name>{interface_number}</name>
+            <bfd>
+              <template>IGP</template>
+            </bfd>
+          </FastEthernet>
+          <GigabitEthernet when="{interface_type='GigabitEthernet'}">
+            <name>{interface_number}</name>
+            <bfd>
+              <template>IGP</template>
+            </bfd>
+          </GigabitEthernet>
+          <TenGigabitEthernet when="{interface_type='TenGigE'}">
+            <name>{interface_number}</name>
+            <bfd>
+              <template>IGP</template>
+            </bfd>
+          </TenGigabitEthernet>
+        </interface>
+      </config>
+    </device>
+    <!-- **************** End XE Config **************** -->
+  </devices>
+</config-template>

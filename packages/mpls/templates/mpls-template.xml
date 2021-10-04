@@ -1,0 +1,121 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+
+    <!-- **************** XR Config **************** -->
+    <device>
+ 
+      <name>{/device}</name>
+      <config>
+        <mpls xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <ldp>
+            <nsr/>
+            <graceful-restart/>
+            <session>
+              <protection/>
+            </session>
+            <router-id>{/mpls/router_id}</router-id>
+            <address-family>
+              <ipv4/>
+            </address-family>
+            <interface foreach="{/interface}">
+              <name>{interface_type}{interface_number}</name>
+            </interface>
+          </ldp>
+        </mpls>
+
+      <router xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <isis>
+            <tag>
+              <name>{/isis/process_name}</name>
+              <address-family>
+                <ipv4>
+                  <unicast>
+                    <mpls>
+                      <traffic-eng>
+                        <level>level-2-only</level>
+                        <router-id>
+                          <Loopback>0</Loopback>
+                        </router-id>
+                      </traffic-eng>
+                    </mpls>
+                  </unicast>
+                </ipv4>
+              </address-family>
+
+              <interface foreach="{/interface}">
+                <name>{interface_type}{interface_number}</name>
+                <address-family>
+                  <ipv4>
+                    <unicast>
+                      <mpls>
+                        <ldp>
+                          <sync/>
+                        </ldp>
+                      </mpls>
+                    </unicast>
+                  </ipv4>
+                </address-family>
+              </interface>
+              
+            </tag>
+          </isis>
+        </router>
+
+      </config>
+    </device>
+    <!-- **************** End XR Config **************** -->
+
+    <!-- **************** XE Config **************** -->
+    <device>
+      <name>{/device}</name>
+      <config>
+
+        <!-- Begin ISIS Process Config  -->
+        <router xmlns="urn:ios">
+          <isis-container>
+            <isis>
+              <area-tag>{/isis/process_name}</area-tag>
+              
+              <mpls>
+                <ldp>
+                  <sync/>
+                </ldp>
+                <traffic-eng>
+                  <level-2/>
+                  <router-id>
+                    <Loopback>0</Loopback>
+                  </router-id>
+                </traffic-eng>
+              </mpls>
+ 
+            </isis>
+          </isis-container>
+        </router>
+
+        <!-- Begin Interface Config -->
+        <interface xmlns="urn:ios" foreach="{/interface}">
+          <FastEthernet when="{interface_type='FastEthernet'}">
+            <name>{interface_number}</name>
+            <mpls>
+              <ip/>
+            </mpls>
+          </FastEthernet>
+          <GigabitEthernet when="{interface_type='GigabitEthernet'}">
+            <name>{interface_number}</name>
+            <mpls>
+              <ip/>
+            </mpls>
+          </GigabitEthernet>
+          <TenGigabitEthernet when="{interface_type='TenGigE'}">
+            <name>{interface_number}</name>
+            <mpls>
+              <ip/>
+            </mpls>
+          </TenGigabitEthernet>
+        </interface>
+      </config>
+    </device>
+    <!-- **************** End XE Config **************** -->
+
+  </devices>
+</config-template>

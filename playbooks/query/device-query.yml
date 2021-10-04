@@ -1,0 +1,12 @@
+- name: Query devices including operational data
+  nso_query:
+    url: "{{ api.url }}"
+    username: "{{ api.username }}"
+    password: "{{ api.password }}"
+    xpath: /ncs:devices/device
+    fields:
+    - name
+    - device-type
+  register: shell_result
+- debug:
+    var: shell_result

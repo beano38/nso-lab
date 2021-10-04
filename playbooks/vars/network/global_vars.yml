@@ -1,0 +1,20 @@
+regions:
+  - region_name: EAST
+    global:
+      name_servers: 172.16.30.10
+      ntp_servers: ntp.cmllab.test
+      mgmt_vrf: Mgmt-intf
+      xe_mgmt_int: 0
+      xr_mgmt_int: 0/RP0/CPU0/0
+    devices:
+      - xe0
+      - xr0
+
+interconnects:
+  - name: P01-PE01
+    port:
+    - device: P01-XR9KV
+      intf-number: 0/0/0/0
+      
+    - device: PE01-XR9KV
+      intf-number: 0/0/0/0

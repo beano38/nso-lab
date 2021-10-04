@@ -1,0 +1,45 @@
+---
+# Commit Interconnects all at once in the {{ network.interconnects }} section
+# - name: Build All Interconnects
+#   nso_config:
+#     url: "{{ api.url }}"
+#     username: "{{ api.username }}"
+#     password: "{{ api.password }}"
+#     data:
+#       interconnect:interconnect: "{{ network.interconnects }}"
+
+# Commit Interconnects one by one in the {{ network.interconnects }} section
+# - name: Build Interconnects by iterating thru interconnects section
+#   nso_config:
+#     url: "{{ api.url }}"
+#     username: "{{ api.username }}"
+#     password: "{{ api.password }}"
+#     data:
+#       interconnect:interconnect: ["{{ item }}"]
+#   loop: "{{ network.interconnects }}"
+#   loop_control:
+#     loop_var: item
+#     label: "{{ item.name }}"
+
+
+
+
+- name: Build Interconnects by iterating thru interconnects section
+  nso_config:
+    url: "{{ api.url }}"
+    username: "{{ api.username }}"
+    password: "{{ api.password }}"
+    data:
+      interconnect:interconnect:
+      - name: test
+        device-interfaces:
+        - device: P01-XR9KV
+          intf-number: 0/0/0/0
+          description: here
+          ipv4_address: 10.10.10.1
+          ipv4_mask: 255.255.255.252
+        - device: PE01-XR9KV
+          intf-number: 0/0/0/0
+          description: there
+          ipv4_address: 10.10.10.2
+          ipv4_mask: 255.255.255.252

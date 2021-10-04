@@ -1,0 +1,44 @@
+---
+- hosts: nso
+  gather_facts: True
+
+  pre_tasks:
+    - name: Update package cache and install APT packages
+      become: true
+      apt:
+        name: [ ant, default-jdk, python3, python3-pip,
+        # software-properties-common, git, tree, traceroute, python-dev, python-pip, 
+        # libxml2-dev, libxslt1-dev, zlib1g-dev, vim, libssl-dev, libffi-dev, fonts-inconsolata, python-setuptools, libxml2-utils,
+        # xsltproc
+         ]
+        state: present
+        update_cache: true
+        cache_valid_time: 3600
+
+  handlers:
+    - name: Start NSO 
+      shell: source {{ install.nso_dir }}/ncsrc && ncs
+      args:
+        executable: /bin/bash
+        chdir: "{{ install.nso_dir }}/ncs-run"
+
+  tasks:
+    - name: Load Install variables
+      include_vars:
+        file: vars/install_vars.yml
+        name: install
+    - name: Load API variables
+      include_vars:
+        file: vars/nso-api.yml
+        name: api
+    - name: Load Initial template vars
+      include_vars:
+        file: vars/network/template_vars.yml
+        name: templates
+
+    # - include: install/nso-install.yml
+    # - include: install/neds-install.yml
+    # - include: install/netsim-install.yml
+    - include: install/nso-packages.yml
+    # - include: install/load-templates.yml
+

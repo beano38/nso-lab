@@ -1,0 +1,55 @@
+module ntp {
+  namespace "http://com/example/ntp";
+  prefix ntp;
+
+  import ietf-inet-types { prefix inet; }
+  import tailf-common { prefix tailf; }
+  import tailf-ncs { prefix ncs; }
+
+  description
+    "Simple package to set Network Time Protocol Server configurations";
+
+  revision 2019-07-08 {
+    description
+      "Initial revision.";
+  }
+
+  grouping ntp_conf {
+
+    leaf ntp_ip {
+      tailf:info "IPv4 Address or Domain Name of NTP Server";
+      mandatory true;
+      type string;
+    }
+
+    leaf mgmt_intf_xr {
+      tailf:info "Source Interface for NTP Server for IOSXR devices";
+      type string;
+    }
+
+    leaf mgmt_intf_xe {
+      tailf:info "Source Interface for NTP Server for IOSXE devices";
+      type string;
+    }
+  }
+
+  list ntp {
+    key name;
+
+    uses ncs:service-data;
+    ncs:servicepoint "ntp";
+
+    leaf name {
+      type string;
+    }
+
+    // may replace this with other ways of refering to the devices.
+    leaf-list device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    uses ntp:ntp_conf;
+  }
+}

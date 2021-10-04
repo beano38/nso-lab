@@ -1,0 +1,6 @@
+- name: Reload NSO Packages
+  nso_action:
+    url: "{{ api.url }}"
+    username: "{{ api.username }}"
+    password: "{{ api.password }}"
+    path: /ncs:packages/reload

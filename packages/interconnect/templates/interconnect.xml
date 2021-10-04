@@ -1,0 +1,145 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    
+    <!-- **************** XR Config **************** -->
+    <!-- port 1 -->
+    <device>
+      <name>{/device-interfaces[1]/device}</name>
+      <config tags="merge">
+        <interface xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <GigabitEthernet>
+            <id>{/device-interfaces[1]/intf-number}</id>
+            <description>{/device-interfaces[1]/description}</description>
+            <mtu>9216</mtu>
+            <ipv4>
+              <address>
+                <ip>{/device-interfaces[1]/ipv4_address}</ip>
+                <mask>{/device-interfaces[1]/ipv4_mask}</mask>
+              </address>
+            </ipv4>
+            <ipv6>
+              <address>
+                <prefix-list>
+                  <prefix>{/device-interfaces[1]/ipv6_address}/{/device-interfaces[1]/ipv6_length}</prefix>
+                </prefix-list>
+              </address>
+            </ipv6>
+            <lldp>
+              <enable/>
+            </lldp>
+            <load-interval>30</load-interval>
+          </GigabitEthernet>
+        </interface>
+      </config>
+    </device>
+    <!-- End port 1 -->
+
+    <!-- port 2 -->
+    <device>
+      <name>{/device-interfaces[2]/device}</name>
+      <config>
+        <interface xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <GigabitEthernet>
+            <id>{/device-interfaces[2]/intf-number}</id>
+            <description>{/device-interfaces[2]/description}</description>
+            <mtu>9216</mtu>
+            <ipv4>
+              <address>
+                <ip>{/device-interfaces[2]/ipv4_address}</ip>
+                <mask>{/device-interfaces[2]/ipv4_mask}</mask>
+              </address>
+            </ipv4>
+            <ipv6>
+              <address>
+                <prefix-list>
+                  <prefix>{/device-interfaces[2]/ipv6_address}/{/device-interfaces[2]/ipv6_length}</prefix>
+                </prefix-list>
+              </address>
+            </ipv6>
+            <lldp>
+              <enable/>
+            </lldp>
+            <load-interval>30</load-interval>
+          </GigabitEthernet>
+        </interface>
+      </config>
+    </device>
+    <!-- End port 2 -->
+    <!-- **************** End XR Config **************** -->
+
+
+
+    <!-- **************** XE Config **************** -->
+    <!-- port 1 -->
+    <device>
+      <name>{/device-interfaces[1]/device}</name>
+      <config tags="merge">
+        <interface xmlns="urn:ios">
+          <GigabitEthernet>
+            <name>{/device-interfaces[1]/intf-number}</name>
+            <description>{/device-interfaces[1]/description}</description>
+            <mtu>9202</mtu>
+            <lldp>
+              <transmit>true</transmit>
+              <receive>true</receive>
+            </lldp>
+            <ip>
+              <address>
+                <primary>
+                  <address>{/device-interfaces[1]/ipv4_address}</address>
+                  <mask>{/device-interfaces[1]/ipv4_mask}</mask>
+                </primary>
+              </address>
+            </ip>
+            <ipv6>
+              <address>
+                <prefix-list>
+                  <prefix>{/device-interfaces[1]/ipv6_address}/{/device-interfaces[1]/ipv6_length}</prefix>
+                </prefix-list>
+              </address>
+            </ipv6>
+            <load-interval>30</load-interval>
+          </GigabitEthernet>
+        </interface>
+      </config>
+    </device>
+    <!-- End port 1 -->
+
+    <!-- port 2 -->
+    <device>
+      <name>{/device-interfaces[2]/device}</name>
+      <config tags="merge">
+        <interface xmlns="urn:ios">
+          <GigabitEthernet>
+            <name>{/device-interfaces[2]/intf-number}</name>
+            <description>{/device-interfaces[2]/description}</description>
+            <mtu>9202</mtu>
+            <lldp>
+              <transmit>true</transmit>
+              <receive>true</receive>
+            </lldp>
+            <ip>
+              <address>
+                <primary>
+                  <address>{/device-interfaces[2]/ipv4_address}</address>
+                  <mask>{/device-interfaces[2]/ipv4_mask}</mask>
+                </primary>
+              </address>
+            </ip>
+            <ipv6>
+              <address>
+                <prefix-list>
+                  <prefix>{/device-interfaces[2]/ipv6_address}/{/device-interfaces[2]/ipv6_length}</prefix>
+                </prefix-list>
+              </address>
+            </ipv6>
+            <load-interval>30</load-interval>
+          </GigabitEthernet>
+        </interface>
+      </config>
+    </device>
+    <!-- End  2 -->
+    <!-- **************** End XE Config **************** -->
+
+  </devices>
+</config-template>
