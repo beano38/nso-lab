@@ -3,15 +3,12 @@ module bgp {
   namespace "http://example.com/bgp";
   prefix bgp;
 
-  import ietf-inet-types {
-    prefix inet;
-  }
-  import tailf-common {
-    prefix tailf;
-  }
-  import tailf-ncs {
-    prefix ncs;
-  }
+  import ietf-inet-types {prefix inet;}
+  import tailf-common {prefix tailf;}
+  import tailf-ncs {prefix ncs;}
+
+  // import common service models
+  import vrf { prefix vrf; }
 
   description
     "Bla bla...";
@@ -20,6 +17,7 @@ module bgp {
     description
       "Initial revision.";
   }
+
 
   list bgp {
     description "This is an RFS skeleton service";
@@ -34,16 +32,22 @@ module bgp {
     uses ncs:service-data;
     ncs:servicepoint bgp-servicepoint;
 
-    // may replace this with other ways of refering to the devices.
-    leaf-list device {
+    leaf device {
+      tailf:info "Device Name";
       type leafref {
         path "/ncs:devices/ncs:device/ncs:name";
       }
     }
 
-    // replace with your own stuff here
-    leaf dummy {
-      type inet:ipv4-address;
+    leaf bgp_as {
+      tailf:info "BGP AS Number <1-65534>";
+      type uint16 {
+        range "1..65534";
+      }
+    }
+    list vrf {
+      key vrf_name;
+      uses vrf:vrf_conf;
     }
   }
 }

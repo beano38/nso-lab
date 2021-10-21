@@ -17,7 +17,6 @@ module vrf {
   grouping vrf_conf {
     leaf vrf_name {
       tailf:info "Name of VRF Instance";
-      mandatory true;
       type string;
     }
     leaf description {
