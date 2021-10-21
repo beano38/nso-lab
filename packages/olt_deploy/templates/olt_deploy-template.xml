@@ -1,0 +1,88 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+
+    <device foreach="{pe}">
+      <name>{device}</name>
+      <config>
+
+        <interface xmlns="http://tail-f.com/ned/cisco-ios-xr" foreach="{/pe/interfaces/interface}" tags="merge">
+
+          <TenGigE when="{interface_type='TenGigE' and not(outer_vlan)}">
+            <id>{interface_number}</id>
+            <description>{description}</description>
+            <load-interval>30</load-interval>
+            <bundle when="{bundle_id}">
+              <id>
+                <id-value>{bundle_id}</id-value>
+                <mode>{lacp_mode}</mode>
+              </id>
+              <port-priority>10</port-priority>
+            </bundle>
+            <lacp when="{lacp_mode}">
+              <period>
+                <short-enable>
+                  <short/>
+                </short-enable>
+              </period>
+            </lacp>
+          </TenGigE>
+
+          <Bundle-Ether when="{interface_type='Bundle-Ether' and not(outer_vlan)}">
+            <id>{interface_number}</id>
+            <description>{description}</description>
+            <load-interval>30</load-interval>
+            <lacp when="{lacp_mode}">
+              <mode>{lacp_mode}</mode>
+              <system>
+                <mac>{lacp_mac_address}</mac>
+              </system>
+              <switchover>
+                <suppress-flaps>300</suppress-flaps>
+              </switchover>
+            </lacp>
+          </Bundle-Ether>
+
+          <Bundle-Ether-subinterface when="{outer_vlan}">
+            <Bundle-Ether when="{interface_type='Bundle-Ether'}">
+              <id>{interface_number}</id>
+              <mode>l2transport</mode>
+              <description>{description}</description>
+              <encapsulation>
+                <dot1q>
+                  <vlan-id>{outer_vlan}</vlan-id>
+                </dot1q>
+              </encapsulation>
+              <rewrite>
+                <ingress>
+                  <tag>
+                    <pop>1</pop>
+                    <mode>symmetric</mode>
+                  </tag>
+                </ingress>
+              </rewrite>
+            </Bundle-Ether>
+          </Bundle-Ether-subinterface>
+
+        </interface>
+
+        <evpn xmlns="http://tail-f.com/ned/cisco-ios-xr" tags="merge">
+
+          <interface foreach="{/pe/evpn/interface}">
+            <name>{interface_type}{interface_number}</name>
+            <ethernet-segment>
+              <identifier>
+                <type>
+                  <esi-type>0</esi-type>
+                  <esi-identifier>{esi_identifier}</esi-identifier>
+                </type>
+              </identifier>
+            </ethernet-segment>
+          </interface>
+
+        </evpn>
+
+      </config>
+    </device>
+
+  </devices>
+</config-template>

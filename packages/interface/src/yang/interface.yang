@@ -73,6 +73,13 @@ module interface {
   }
 
   grouping lacp_conf {
+    leaf bundle_id {
+      tailf:info "Bundle-Ether ID";
+      type uint8 {
+        range 1..255;
+      }
+    }
+
     leaf lacp_mode {
       tailf:info "Set the LACP mode on the interface";
       type enumeration {
