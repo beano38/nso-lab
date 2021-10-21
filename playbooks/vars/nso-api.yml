@@ -1,4 +1,4 @@
 ---
-url: http://192.168.1.68:8080/jsonrpc
+url: http://172.28.128.3:8080/jsonrpc
 username: admin
 password: admin

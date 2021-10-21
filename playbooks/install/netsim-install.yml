@@ -9,13 +9,13 @@
     cache_valid_time: 3600
 
 - name: Create netsim device network
-  shell: source {{ install.nso_dir }}/ncsrc && ncs-netsim create-network {{ install.extracted_xe_ned }} {{ install.netsim_count }} xe
+  shell: source {{ install.nso_dir }}/ncsrc && ncs-netsim create-network {{ install.extracted_xe_ned }} {{ install.xe_netsim_count }} xe
   args:
     executable: /bin/bash
   ignore_errors: true
 
 - name: Add to netsim device network
-  shell: source {{ install.nso_dir }}/ncsrc && ncs-netsim add-to-network {{ install.extracted_xr_ned }} {{ install.netsim_count }} xr
+  shell: source {{ install.nso_dir }}/ncsrc && ncs-netsim add-to-network {{ install.extracted_xr_ned }} {{ install.xr_netsim_count }} xr
   args:
     executable: /bin/bash
   ignore_errors: true

@@ -7,12 +7,12 @@
   loop:
     "{{ install.packages }}"
 
-- name: Compile Packages
-  make:
-    chdir: "{{ install.nso_dir }}/ncs-run/packages/{{ item }}/src"
-  environment:
-    NCS_DIR: /home/{{ install.user }}/nso-{{ install.version }}
-  loop:
-    "{{ install.packages }}"
+# - name: Compile Packages
+#   make:
+#     chdir: "{{ install.nso_dir }}/ncs-run/packages/{{ item }}/src"
+#   environment:
+#     NCS_DIR: "/home/{{ install.user }}/nso-{{ install.version }}"
+#   loop:
+#     "{{ install.packages }}"
 
-- include: action/packages-reload.yml
+# - include: action/packages-reload.yml

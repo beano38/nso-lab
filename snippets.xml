@@ -1,0 +1,39 @@
+<config xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <device>
+      <name>EVPN-PE0-RTR</name>
+      <config>
+        <dhcp xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <ipv4>
+            <profile>
+              <name>INVENTORY</name>
+              <type>relay</type>
+              <helper-address>
+                <vrf>Mgmt-intf</vrf>
+                <address>198.18.201.16</address>
+                <giaddr>198.18.200.11</giaddr>
+              </helper-address>
+              <relay>
+                <information>
+                  <option>
+                    <vpn/>
+                  </option>
+                </information>
+              </relay>
+            </profile>
+            <interface>
+              <name>BVI201</name>
+              <type>relay</type>
+              <profile>INVENTORY</profile>
+            </interface>
+            <interface>
+              <name>BVI202</name>
+              <type>relay</type>
+              <profile>INVENTORY</profile>
+            </interface>
+          </ipv4>
+        </dhcp>
+      </config>
+    </device>
+  </devices>
+</config>

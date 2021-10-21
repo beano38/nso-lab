@@ -1,0 +1,39 @@
+<config xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <device>
+      <name>{device}</name>
+      <config>
+        <dhcp xmlns="http://tail-f.com/ned/cisco-ios-xr">
+          <ipv4>
+
+            <profile foreach="{profile}">
+              <name>{profile_name}</name>
+              <type>relay</type>
+              <helper-address foreach="{relay}">
+                <vrf>{vrf_name}</vrf>
+                <address>{helper_address}</address>
+                <giaddr when="{giaddr}">{giaddr}</giaddr>
+              </helper-address>
+              
+              <relay>
+                <information>
+                  <option>
+                    <vpn/>
+                  </option>
+                </information>
+              </relay>
+
+            </profile>
+
+            <interface foreach="{interface}">
+              <name>{interface_type}{interface_number}</name>
+              <type>relay</type>
+              <profile>{profile_name}</profile>
+            </interface>
+
+          </ipv4>
+        </dhcp>
+      </config>
+    </device>
+  </devices>
+</config>

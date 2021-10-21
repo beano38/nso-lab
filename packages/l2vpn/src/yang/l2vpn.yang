@@ -1,0 +1,82 @@
+module l2vpn {
+
+  namespace "http://example.com/l2vpn";
+  prefix l2vpn;
+
+  import ietf-inet-types {prefix inet;}
+  import tailf-common {prefix tailf;}
+  import tailf-ncs {prefix ncs;}
+
+  // import common service models
+  import interface { prefix interface; }
+  import evpn { prefix evpn; }
+
+  description
+    "Bla bla...";
+
+  revision 2016-01-01 {
+    description
+      "Initial revision.";
+  }
+
+  grouping vpls {
+    list bridge_group {
+      description "Bridge Group configuration";
+      
+      key group_name;
+      leaf group_name {
+        tailf:info "Bridge Group Name";
+        type string;
+      }
+
+      list bridge_domain {
+        description "Bridge Domain Configuration";
+
+        key bd_name;
+        leaf bd_name {
+          tailf:info "Bridge Domain Name";
+          type string;
+        }
+
+        leaf mtu {
+          tailf:info "MTU of Bridge Domain";
+          type uint16 {
+            range "1..9500";
+          }
+          default "1514";
+        }
+
+        list interface {
+          description "Interfaces that will be configured";
+          key "interface_type interface_number";
+        
+          uses interface:basic_conf;
+        }
+        uses evpn:evi_conf;
+      }
+    }
+  }
+
+  list l2vpn {
+    description "This is an RFS skeleton service";
+
+    key name;
+    leaf name {
+      tailf:info "Unique service id";
+      tailf:cli-allow-range;
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint l2vpn-servicepoint;
+
+    leaf device {
+      tailf:info "Device Name";
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+    uses l2vpn:vpls;
+
+  }
+}

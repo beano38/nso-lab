@@ -1,0 +1,39 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+
+
+    <!-- **************** XR Config **************** -->
+
+    <device>
+      <name>{$device}</name>
+      <config>
+        <evpn xmlns="http://tail-f.com/ned/cisco-ios-xr" tags="merge">
+          
+          <evi foreach="{evi}">
+            <id>{evi_id}</id>
+            <advertise-mac/>
+            <unknown-unicast-suppression/>
+          </evi>
+
+          <interface foreach="{interface}">
+            <name>{interface_type}{interface_number}</name>
+            <ethernet-segment>
+              <identifier>
+                <type>
+                  <esi-type>0</esi-type>
+                  <esi-identifier>{esi_identifier}</esi-identifier>
+                </type>
+              </identifier>
+            </ethernet-segment>
+          </interface>
+
+        </evpn>
+      </config>
+    </device>
+
+    <!-- **************** XR Config **************** -->
+
+
+
+  </devices>
+</config-template>

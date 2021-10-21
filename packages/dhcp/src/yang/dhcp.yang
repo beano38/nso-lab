@@ -1,0 +1,80 @@
+module dhcp {
+
+  namespace "http://example.com/dhcp";
+  prefix dhcp;
+
+  import ietf-inet-types {prefix inet;}
+  import tailf-common {prefix tailf;}
+  import tailf-ncs {prefix ncs;}
+
+  // import common service models
+  import interface { prefix interface; }
+
+  description
+    "Bla bla...";
+
+  revision 2016-01-01 {
+    description
+      "Initial revision.";
+  }
+
+  list dhcp {
+    description "This is an RFS skeleton service";
+
+    key name;
+    leaf name {
+      tailf:info "Unique service id";
+      tailf:cli-allow-range;
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint dhcp-servicepoint;
+
+    leaf device {
+      tailf:info "Device Name";
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    list profile {
+
+      key profile_name;
+      leaf profile_name {
+        tailf:info "Name of DHCP Service";
+        type string;
+      }
+
+      list relay {
+
+        key helper_address;
+        leaf helper_address {
+          tailf:info "IP Address of DHCP Service";
+          type inet:ipv4-address;
+        }
+
+        leaf vrf_name {
+          tailf:info "VRF Name";
+          type string;
+        }
+
+        leaf giaddr {
+          tailf:info "Relay IP address if not on same network";
+          type inet:ipv4-address;
+        }
+      }
+    }
+    list interface {
+      description "Interfaces that will be configured";
+      key "interface_type interface_number";
+    
+      uses interface:basic_conf;
+
+      leaf profile_name {
+        tailf:info "Name of DHCP Service";
+        type string;
+      }
+    }
+  }
+}

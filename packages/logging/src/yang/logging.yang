@@ -1,5 +1,5 @@
 module logging {
-  namespace "http://com/example/logging";
+  namespace "http://example.com/logging";
   prefix logging;
 
   import ietf-inet-types { prefix inet; }

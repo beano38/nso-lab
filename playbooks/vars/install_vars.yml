@@ -7,26 +7,44 @@ local_templates_dir: ../templates
 
 # Remote Host
 user: vagrant
-nso_dir: $HOME/nso-5.3.2.1
+nso_dir: $HOME/nso-5.6.1
 temp_files_dir: /tmp
 
 # Binary
-version: 5.3.2.1
+version: 5.6.1
 os : linux.x86_64
 
 # NED Info for neds-install.yml
-xr_ned: ncs-5.3.2-cisco-iosxr-7.28
-extracted_xr_ned: cisco-iosxr-cli-7.28
-xe_ned: ncs-5.3.2-cisco-ios-6.58
-extracted_xe_ned: cisco-ios-cli-6.58
+xr_ned: ncs-5.6.1-cisco-iosxr-7.36.3
+extracted_xr_ned: cisco-iosxr-cli-7.36
+xe_ned: ncs-5.6.1-cisco-ios-6.76.2
+extracted_xe_ned: cisco-ios-cli-6.76
 
 # NSO netsim
-netsim_count: 2
-netsim_hostname: pe
+xe_netsim_count: 1
+xr_netsim_count: 6
+# netsim_hostname: pe
 
 # Custom NSO Packages
 packages:
-  - interconnect
+  # - baseline
+  # - bfd
+  # - dhcp
+  # - dns
+  # - evpn
+  - evpn_irb
+  # - interconnect
+  # - interface
+  # - isis
+  # - l2vpn
+  # - logging
+  # - loopback
+  # - mpls
+  # - ntp
+  # - segment_routing
+  # - vrf
+  # - baseline
+
 
 # Custom NSO Static Templates
 templates:
@@ -34,5 +52,5 @@ templates:
 
 # V2 NED Install
 ned_list:
-  - ncs-5.3.2-cisco-ios-6.58.signed.bin
-  - ncs-5.3.2-cisco-iosxr-7.28.signed.bin
+  - ncs-5.6.1-cisco-ios-6.76.2.signed.bin
+  - ncs-5.6.1-cisco-iosxr-7.36.3.signed.bin

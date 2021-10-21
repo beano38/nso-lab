@@ -9,9 +9,28 @@
         <vrf xmlns="http://tail-f.com/ned/cisco-ios-xr">
           <vrf-list>
             <name>{/vrf_name}</name>
+            <description>{/description}</description>
             <address-family>
-              <ipv4>
-                <unicast/>
+              <ipv4 tags="replace">
+                <unicast>
+                  <import>
+                    <route-target>
+                      <address-list>
+                        <name>{/my_bgp_as}:{/my_vrf_community}</name>
+                      </address-list>
+                      <address-list foreach="{/v4_imports}" when="{/v4_imports}">
+                        <name>{bgp_as}:{vrf_community}</name>
+                      </address-list>
+                    </route-target>
+                  </import>
+                  <export>
+                    <route-target>
+                      <address-list>
+                        <name>{/my_bgp_as}:{/my_vrf_community}</name>
+                      </address-list>
+                    </route-target>
+                  </export>
+                </unicast>
               </ipv4>
               <ipv6>
                 <unicast/>

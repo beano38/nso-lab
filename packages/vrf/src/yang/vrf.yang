@@ -21,6 +21,10 @@ module vrf {
       mandatory true;
       type string;
     }
+    leaf description {
+      tailf:info "Description of VRF";
+      type string;
+    }
   }
 
   list vrf {
@@ -31,6 +35,38 @@ module vrf {
 
     leaf name {
       type string;
+    }
+
+    leaf my_bgp_as {
+      tailf:info "VRF BGP AS Number <1-65534>";
+      type uint16 {
+        range "1..65534";
+      }
+    }
+    leaf my_vrf_community {
+      tailf:info "VRF Community Number <1-65534>";
+      type uint32 {
+        range "1..65534";
+      }
+    }
+
+    list v4_imports{
+      key vrf_community;
+
+      leaf bgp_as {
+        tailf:info "VRF BGP AS Number <1-65534>";
+        type uint16 {
+          range "1..65534";
+        }
+      }
+
+      leaf vrf_community {
+        tailf:info "VRF Community Number <1-65534>";
+        type uint32 {
+          range "1..65534";
+          // really range is 0 to 4,294,967,295
+        }
+      }
     }
 
     // may replace this with other ways of refering to the devices.

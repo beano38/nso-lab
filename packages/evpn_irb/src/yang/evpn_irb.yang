@@ -1,0 +1,79 @@
+module evpn_irb {
+
+  namespace "http://example.com/evpn_irb";
+  prefix evpn_irb;
+
+  import ietf-inet-types {prefix inet;}
+  import tailf-common {prefix tailf;}
+  import tailf-ncs {prefix ncs;}
+
+  // import common service models
+  import interface { prefix interface; }
+  import evpn { prefix evpn; }
+
+  description
+    "Bla bla...";
+
+  revision 2016-01-01 {
+    description
+      "Initial revision.";
+  }
+
+  list evpn_irb {
+    description "This is an RFS skeleton service";
+
+    key name;
+    leaf name {
+      tailf:info "Unique EVPN IRB Circuit";
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint evpn_irb-servicepoint;
+
+
+    list pe {
+      key "id";
+      leaf id {
+        tailf:info "Endpoint identifier";
+        type string;
+      }
+      leaf device {
+        mandatory true;
+        type leafref {
+          path "/ncs:devices/ncs:device/ncs:name";
+        }
+      }
+
+      list evpn {
+        description "This is an RFS skeleton service";
+
+        key name;
+        leaf name {
+          tailf:info "Unique service id";
+          default: "EVPN";
+          type string;
+        }
+
+        list evi {
+          tailf:info "Unique Ethernet Virtual Identifier";
+          key "evi_id";
+
+          uses evpn:evi_conf;
+        }
+
+        list interface {
+          description "Interfaces that will be configured";
+          key "interface_type interface_number";
+        
+          uses interface:basic_conf;
+
+          uses evpn:esi_conf;
+          
+        } 
+      }
+
+      
+    }
+  }
+}

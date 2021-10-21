@@ -1,0 +1,121 @@
+module interface {
+
+  namespace "http://example.com/interface";
+  prefix interface;
+
+  import ietf-inet-types {prefix inet;}
+  import tailf-common {prefix tailf;}
+  import tailf-ncs {prefix ncs;}
+
+  description
+    "Bla bla...";
+
+  revision 2016-01-01 {
+    description
+      "Initial revision.";
+  }
+
+  grouping basic_conf {
+    leaf interface_type {
+        type enumeration {
+          enum "Loopback";
+          enum "Bundle-Ether";
+          enum "BVI";
+          enum "GigabitEthernet";
+          enum "TenGigE";
+        }
+    }
+    leaf interface_number {
+      tailf:info "Interface Number";
+      type string;
+    }
+    leaf description {
+      tailf:info "Interface Description";
+      type string;
+    }
+  }
+
+  grouping l3_conf {
+    leaf ipv4_address {
+      tailf:info "IPv4 Address";
+      type inet:ipv4-address;
+    }
+    leaf ipv4_mask {
+      tailf:info "IPv4 Netmask";
+      type inet:ipv4-address;
+    }
+    leaf ipv6_address {
+      tailf:info "IPv6 Address";
+      type inet:ipv6-address;
+    }
+    leaf ipv6_length {
+      tailf:info "IPv6 Prefix Length";
+      type string;
+    }
+    leaf vrf {
+      tailf:info "VRF Name";
+      type string;
+    }
+  }
+
+  grouping l2_conf {
+    leaf mac_address {
+      tailf:info "Static MAC address of LACP Bundle";
+      type string;
+    }
+  }
+
+  grouping efp_conf {
+    leaf outer_vlan {
+      tailf:info "VLAN ID";
+      type string;
+    }
+  }
+
+  grouping lacp_conf {
+    leaf lacp_mode {
+      tailf:info "Set the LACP mode on the interface";
+      type enumeration {
+          enum "active";
+          enum "on";
+          enum "passive";
+        }
+    }
+    leaf lacp_mac_address {
+      tailf:info "Static MAC address of LACP Bundle";
+      type string;
+    }
+  }
+
+  list interface {
+    description "Interface type and number to be configured";
+
+    key name;
+    leaf name {
+      tailf:info "Unique service id";
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint interface-servicepoint;
+
+    leaf device {
+      tailf:info "Device Name";
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+        }
+      }
+
+    list interface {
+        description "Interfaces that will be configured";
+        key "interface_type interface_number";
+
+        uses interface:basic_conf;
+        uses interface:l3_conf;
+        uses interface:l2_conf;
+        uses interface:efp_conf;
+        uses interface:lacp_conf;
+      
+    }
+  }
+}
