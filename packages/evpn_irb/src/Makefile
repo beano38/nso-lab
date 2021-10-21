@@ -12,6 +12,7 @@ FXS = $(SRC:yang/%.yang=../load-dir/%.fxs)
 ## or to other YANG files
 # YANGPATH += ../../<ned-name>/src/ncsc-out/modules/yang \
 # 	../../<pkt-name>/src/yang
+YANGPATH += ../../vrf/src/yang
 YANGPATH += ../../interface/src/yang
 YANGPATH += ../../evpn/src/yang
 YANGPATH += ../../l2vpn/src/yang

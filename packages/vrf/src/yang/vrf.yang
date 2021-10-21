@@ -15,7 +15,6 @@ module vrf {
   }
 
   grouping vrf_conf {
-
     leaf vrf_name {
       tailf:info "Name of VRF Instance";
       mandatory true;
@@ -25,18 +24,6 @@ module vrf {
       tailf:info "Description of VRF";
       type string;
     }
-  }
-
-  list vrf {
-    key name;
-
-    uses ncs:service-data;
-    ncs:servicepoint "vrf";
-
-    leaf name {
-      type string;
-    }
-
     leaf my_bgp_as {
       tailf:info "VRF BGP AS Number <1-65534>";
       type uint16 {
@@ -49,8 +36,10 @@ module vrf {
         range "1..65534";
       }
     }
+  }
 
-    list v4_imports{
+  grouping vrf_imports {
+    list v4_imports {
       key vrf_community;
 
       leaf bgp_as {
@@ -59,7 +48,6 @@ module vrf {
           range "1..65534";
         }
       }
-
       leaf vrf_community {
         tailf:info "VRF Community Number <1-65534>";
         type uint32 {
@@ -68,14 +56,21 @@ module vrf {
         }
       }
     }
+  }
 
-    // may replace this with other ways of refering to the devices.
-    leaf-list device {
+  list vrf {
+    key vrf_name;
+    uses vrf:vrf_conf;
+
+    uses ncs:service-data;
+    ncs:servicepoint "vrf";
+
+    leaf device {
+      tailf:info "Device Name";
       type leafref {
         path "/ncs:devices/ncs:device/ncs:name";
       }
     }
-
-    uses vrf:vrf_conf;
+    uses vrf:vrf_imports;
   }
 }

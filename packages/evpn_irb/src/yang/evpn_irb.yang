@@ -8,6 +8,7 @@ module evpn_irb {
   import tailf-ncs {prefix ncs;}
 
   // import common service models
+  import vrf { prefix vrf; }
   import interface { prefix interface; }
   import evpn { prefix evpn; }
   import l2vpn {prefix l2vpn;}
@@ -35,6 +36,15 @@ module evpn_irb {
     leaf-list device {
       type leafref {
         path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    container vrfs {
+      description "VRF instances that will be configured";
+      list vrf {
+        key vrf_name;
+        uses vrf:vrf_conf;
+        uses vrf:vrf_imports;
       }
     }
 

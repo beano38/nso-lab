@@ -32,7 +32,7 @@ packages:
   # - dhcp
   # - dns
   # - evpn
-  # - evpn_irb
+  - evpn_irb
   # - interconnect
   # - interface
   # - isis
@@ -42,7 +42,7 @@ packages:
   # - mpls
   # - ntp
   # - segment_routing
-  - vrf
+  # - vrf
   # - baseline
 
 
