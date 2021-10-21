@@ -66,6 +66,13 @@ module olt_deploy {
           uses evpn:esi_conf;
         } 
       }
+      container l2vpn {
+        leaf group_name {
+          tailf:info "Bridge Group Name";
+          type string;
+        }
+        uses l2vpn:vpls;
+      }
     }
   }
 }

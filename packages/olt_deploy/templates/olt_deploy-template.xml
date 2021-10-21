@@ -66,7 +66,6 @@
         </interface>
 
         <evpn xmlns="http://tail-f.com/ned/cisco-ios-xr" tags="merge">
-
           <interface foreach="{/pe/evpn/interface}">
             <name>{interface_type}{interface_number}</name>
             <ethernet-segment>
@@ -78,8 +77,35 @@
               </identifier>
             </ethernet-segment>
           </interface>
-
         </evpn>
+
+        <l2vpn xmlns="http://tail-f.com/ned/cisco-ios-xr" tags="merge">
+          <bridge>
+            <group>
+              <group-name>{/pe/l2vpn/group_name}</group-name>
+              <bridge-domain foreach="{/pe/l2vpn/bridge_domain}">
+                <bridge-domain-name>{bd_name}</bridge-domain-name>
+                <mtu>{mtu}</mtu>
+                <interface foreach="{interface}">
+                  <name>{interface_type}{interface_number}</name>
+                </interface>
+                <routed when="{interface_name = 'BVI'}">
+                  <interface>
+                    <name>{interface_type}{interface_number}</name>
+                    <split-horizon>
+                      <group>
+                        <core/>
+                      </group>
+                    </split-horizon>
+                  </interface>
+                </routed>
+                <evi when="{evi_id}"> 
+                  <id>{evi_id}</id>
+                </evi>
+              </bridge-domain>
+            </group>
+          </bridge>
+        </l2vpn>
 
       </config>
     </device>
