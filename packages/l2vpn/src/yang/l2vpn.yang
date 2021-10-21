@@ -20,40 +20,30 @@ module l2vpn {
   }
 
   grouping vpls {
-    list bridge_group {
-      description "Bridge Group configuration";
-      
-      key group_name;
-      leaf group_name {
-        tailf:info "Bridge Group Name";
+    list bridge_domain {
+      description "Bridge Domain Configuration";
+
+      key bd_name;
+      leaf bd_name {
+        tailf:info "Bridge Domain Name";
         type string;
       }
 
-      list bridge_domain {
-        description "Bridge Domain Configuration";
-
-        key bd_name;
-        leaf bd_name {
-          tailf:info "Bridge Domain Name";
-          type string;
+      leaf mtu {
+        tailf:info "MTU of Bridge Domain";
+        type uint16 {
+          range "1..9500";
         }
-
-        leaf mtu {
-          tailf:info "MTU of Bridge Domain";
-          type uint16 {
-            range "1..9500";
-          }
-          default "1514";
-        }
-
-        list interface {
-          description "Interfaces that will be configured";
-          key "interface_type interface_number";
-        
-          uses interface:basic_conf;
-        }
-        uses evpn:evi_conf;
+        default "1514";
       }
+
+      list interface {
+        description "Interfaces that will be configured";
+        key "interface_type interface_number";
+      
+        uses interface:basic_conf;
+      }
+      uses evpn:evi_conf;
     }
   }
 
@@ -76,7 +66,16 @@ module l2vpn {
         path "/ncs:devices/ncs:device/ncs:name";
       }
     }
-    uses l2vpn:vpls;
 
+    list bridge_group {
+      description "Bridge Group configuration";
+      
+      key group_name;
+      leaf group_name {
+        tailf:info "Bridge Group Name";
+        type string;
+      }
+      uses l2vpn:vpls;
+    }
   }
 }

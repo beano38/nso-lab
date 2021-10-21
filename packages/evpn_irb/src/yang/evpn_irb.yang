@@ -10,6 +10,7 @@ module evpn_irb {
   // import common service models
   import interface { prefix interface; }
   import evpn { prefix evpn; }
+  import l2vpn {prefix l2vpn;}
 
   description
     "Bla bla...";
@@ -31,6 +32,39 @@ module evpn_irb {
     uses ncs:service-data;
     ncs:servicepoint evpn_irb-servicepoint;
 
+    leaf-list device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+
+    container interfaces {
+        description "Interfaces that will be configured";
+        list interface {
+          key "interface_type interface_number";
+          uses interface:basic_conf;
+          uses interface:l3_conf;
+          uses interface:l2_conf;
+        }
+    }
+
+    container evpn {
+        description "This is an RFS skeleton service";
+        list evi {
+          tailf:info "Unique Ethernet Virtual Identifier";
+          key "evi_id";
+          uses evpn:evi_conf;
+        }
+      }
+
+    container l2vpn {
+      leaf group_name {
+        tailf:info "Bridge Group Name";
+        type string;
+      }
+      uses l2vpn:vpls;
+    }
+
 
     list pe {
       key "id";
@@ -44,28 +78,6 @@ module evpn_irb {
           path "/ncs:devices/ncs:device/ncs:name";
         }
       }
-
-      leaf evpn {
-        description "This is an RFS skeleton service";
-        list evi {
-          tailf:info "Unique Ethernet Virtual Identifier";
-          key "evi_id";
-
-          uses evpn:evi_conf;
-        }
-
-        list interface {
-          description "Interfaces that will be configured";
-          key "interface_type interface_number";
-        
-          uses interface:basic_conf;
-
-          uses evpn:esi_conf;
-          
-        } 
-      }
-
-      
     }
   }
 }

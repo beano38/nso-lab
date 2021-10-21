@@ -15,12 +15,11 @@ class ServiceCallbacks(Service):
         self.log.info('Service create(service=', service._path, ')')
 
         vars = ncs.template.Variables()
-        vars.add('device', service.device)
         template = ncs.template.Template(service)
-        # template.apply('evpn_irb-template', vars)
+        template.apply('evpn_irb-template', vars)
         # template.apply('interface-template', vars)
         # template.apply('l2vpn-template', vars)
-        template.apply('evpn-template', vars)
+        # template.apply('evpn-template', vars)
 
 
 

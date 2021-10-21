@@ -1,19 +1,74 @@
 <config-template xmlns="http://tail-f.com/ns/config/1.0">
   <devices xmlns="http://tail-f.com/ns/ncs">
+
     <device>
-      <!--
-          Select the devices from some data structure in the service
-          model. In this skeleton the devices are specified in a leaf-list.
-          Select all devices in that leaf-list:
-      -->
-      <name>{/device}</name>
+      <name>{device}</name>
       <config>
-        <!--
-            Add device-specific parameters here.
-            In this skeleton the, java code sets a variable DUMMY, use it
-            to set something on the device e.g.:
-            <ip-address-on-device>{$DUMMY}</ip-address-on-device>
-        -->
+
+        <interface xmlns="http://tail-f.com/ned/cisco-ios-xr" foreach="{/interfaces/interface}" tags="merge">
+          <BVI when="{interface_type='BVI'}">
+            <id>{interface_number}</id>
+            <host-routing/>
+            <description>{description}</description>
+            <vrf>{vrf}</vrf>
+            <ipv4>
+              <address>
+                <ip>{ipv4_address}</ip>
+                <mask>{ipv4_mask}</mask>
+              </address>
+            </ipv4>
+            <arp>
+              <timeout>30</timeout>
+            </arp>
+            <load-interval>30</load-interval>
+            <mac-address>{mac_address}</mac-address>
+          </BVI>
+        </interface>
+
+        <evpn xmlns="http://tail-f.com/ned/cisco-ios-xr" tags="merge">
+          <evi foreach="{/evpn/evi}">
+            <id>{evi_id}</id>
+            <advertise-mac/>
+            <unknown-unicast-suppression/>
+          </evi>
+        </evpn>
+
+        <l2vpn xmlns="http://tail-f.com/ned/cisco-ios-xr" tags="merge">
+          <bridge>
+            <group>
+              <group-name>{/l2vpn/group_name}</group-name>
+              <bridge-domain foreach="{/l2vpn/bridge_domain}">
+                <bridge-domain-name>{bd_name}</bridge-domain-name>
+                <mtu>{mtu}</mtu>
+                <interface foreach="{interface}">
+                  <name>{interface_type}{interface_number}</name>
+                </interface>
+                <routed when="{interface_name = 'BVI'}">
+                  <interface>
+                    <name>{interface_type}{interface_number}</name>
+                    <split-horizon>
+                      <group>
+                        <core/>
+                      </group>
+                    </split-horizon>
+                  </interface>
+                </routed>
+                <evi when="{evi_id}"> 
+                  <id>{evi_id}</id>
+                </evi>
+              </bridge-domain>
+            </group>
+          </bridge>
+        </l2vpn>
+
+      </config>
+    </device>
+
+
+    <device foreach="{pe}">
+      <name>{device}</name>
+      <config>
+
       </config>
     </device>
   </devices>

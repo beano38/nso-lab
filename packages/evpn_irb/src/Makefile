@@ -13,8 +13,8 @@ FXS = $(SRC:yang/%.yang=../load-dir/%.fxs)
 # YANGPATH += ../../<ned-name>/src/ncsc-out/modules/yang \
 # 	../../<pkt-name>/src/yang
 YANGPATH += ../../interface/src/yang
-YANGPATH += ../../l2vpn/src/yang
 YANGPATH += ../../evpn/src/yang
+YANGPATH += ../../l2vpn/src/yang
 
 NCSCPATH   = $(YANGPATH:%=--yangpath %)
 YANGERPATH = $(YANGPATH:%=--path %)
