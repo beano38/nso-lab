@@ -38,6 +38,35 @@
           </vrf-list>
         </vrf>
 
+        <router xmlns="http://tail-f.com/ned/cisco-ios-xr" tags="merge">
+          <bgp>
+            <bgp-no-instance>
+              <id>{/bgp/bgp_as}</id>
+              
+              <vrf foreach="{/bgp/vrf}">
+                <name>{vrf_name}</name>
+                <rd>auto</rd>
+                <address-family>
+                  <ipv4>
+                    <unicast>
+                      <label>
+                        <mode>
+                          <per-vrf/>
+                        </mode>
+                      </label>
+                      <redistribute>
+                        <connected/>
+                        <static/>
+                      </redistribute>
+                    </unicast>
+                  </ipv4>
+                </address-family>
+              </vrf>
+              
+            </bgp-no-instance>
+          </bgp>
+        </router>
+
         <interface xmlns="http://tail-f.com/ned/cisco-ios-xr" foreach="{/interfaces/interface}" tags="merge">
           <BVI when="{interface_type='BVI'}">
             <id>{interface_number}</id>

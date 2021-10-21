@@ -9,6 +9,7 @@ module evpn_irb {
 
   // import common service models
   import vrf { prefix vrf; }
+  import bgp { prefix bgp; }
   import interface { prefix interface; }
   import evpn { prefix evpn; }
   import l2vpn {prefix l2vpn;}
@@ -45,6 +46,16 @@ module evpn_irb {
         key vrf_name;
         uses vrf:vrf_conf;
         uses vrf:vrf_imports;
+      }
+    }
+
+    container bgp {
+      description "BGP config";
+      uses bgp:bgp_basic;
+
+      list vrf {
+        key vrf_name;
+        uses vrf:vrf_conf;
       }
     }
 

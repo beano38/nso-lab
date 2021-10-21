@@ -29,11 +29,11 @@ xr_netsim_count: 6
 packages:
   # - baseline
   # - bfd
-  - bgp
+  # - bgp
   # - dhcp
   # - dns
   # - evpn
-  # - evpn_irb
+  - evpn_irb
   # - interconnect
   # - interface
   # - isis

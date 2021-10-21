@@ -18,6 +18,14 @@ module bgp {
       "Initial revision.";
   }
 
+  grouping bgp_basic {
+    leaf bgp_as {
+      tailf:info "BGP AS Number <1-65534>";
+      type uint16 {
+        range "1..65534";
+      }
+    }
+  }
 
   list bgp {
     description "This is an RFS skeleton service";
@@ -38,13 +46,8 @@ module bgp {
         path "/ncs:devices/ncs:device/ncs:name";
       }
     }
+    uses bgp:bgp_basic;
 
-    leaf bgp_as {
-      tailf:info "BGP AS Number <1-65534>";
-      type uint16 {
-        range "1..65534";
-      }
-    }
     list vrf {
       key vrf_name;
       uses vrf:vrf_conf;
