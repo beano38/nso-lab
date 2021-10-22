@@ -34,11 +34,11 @@ module olt_deploy {
     ncs:servicepoint olt_deploy-servicepoint;
 
     list pe {
-      key "id";
-      leaf id {
-        tailf:info "Endpoint identifier";
-        type string;
-      }
+      key "device";
+    //  leaf id {
+    //    tailf:info "Endpoint identifier";
+    //    type string;
+    //  }
 
       leaf device {
         mandatory true;
