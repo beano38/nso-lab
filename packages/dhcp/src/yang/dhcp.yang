@@ -18,6 +18,31 @@ module dhcp {
       "Initial revision.";
   }
 
+  grouping basic_conf {
+    leaf profile_name {
+        tailf:info "Name of DHCP Service";
+        type string;
+      }
+  }
+
+  grouping helper_address_conf {
+    list relay {
+      key helper_address;
+      leaf helper_address {
+        tailf:info "IP Address of DHCP Service";
+        type inet:ipv4-address;
+      }
+      leaf vrf_name {
+        tailf:info "VRF Name";
+        type string;
+      }
+      leaf giaddr {
+        tailf:info "Relay IP address if not on same network";
+        type inet:ipv4-address;
+      }
+    }
+  }
+
   list dhcp {
     description "This is an RFS skeleton service";
 
@@ -39,42 +64,17 @@ module dhcp {
     }
 
     list profile {
-
       key profile_name;
-      leaf profile_name {
-        tailf:info "Name of DHCP Service";
-        type string;
-      }
+      uses dhcp:basic_conf;
+      uses dhcp:helper_address_conf;
 
-      list relay {
-
-        key helper_address;
-        leaf helper_address {
-          tailf:info "IP Address of DHCP Service";
-          type inet:ipv4-address;
-        }
-
-        leaf vrf_name {
-          tailf:info "VRF Name";
-          type string;
-        }
-
-        leaf giaddr {
-          tailf:info "Relay IP address if not on same network";
-          type inet:ipv4-address;
-        }
-      }
     }
     list interface {
       description "Interfaces that will be configured";
       key "interface_type interface_number";
     
       uses interface:basic_conf;
-
-      leaf profile_name {
-        tailf:info "Name of DHCP Service";
-        type string;
-      }
+      uses dhcp:basic_conf;
     }
   }
 }

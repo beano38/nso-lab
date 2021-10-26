@@ -30,7 +30,7 @@ packages:
   # - baseline
   # - bfd
   # - bgp
-  # - dhcp
+  - dhcp
   # - dns
   # - evpn
   # - evpn_irb
@@ -42,7 +42,7 @@ packages:
   # - loopback
   # - mpls
   # - ntp
-  - olt_deploy
+  # - olt_deploy
   # - segment_routing
   # - vrf
   # - baseline
