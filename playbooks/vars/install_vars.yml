@@ -30,8 +30,8 @@ packages:
   # - baseline
   # - bfd
   # - bgp
-  - dhcp
-  # - dns
+  # - dhcp
+  - dns
   # - evpn
   # - evpn_irb
   # - interconnect
@@ -46,7 +46,7 @@ packages:
   # - segment_routing
   # - vrf
   # - baseline
-
+ 
 
 # Custom NSO Static Templates
 templates:

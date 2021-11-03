@@ -38,7 +38,7 @@
 
     # - include: install/nso-install.yml
     # - include: install/neds-install.yml
-    # - include: install/netsim-install.yml
+    - include: install/netsim-install.yml
     - include: install/nso-packages.yml
     # - include: install/load-templates.yml
 
